@@ -24,6 +24,8 @@ const getListStyle = isDraggingOver => ({
     padding: grid,
 });
 
+
+
 class Dashboard extends Component {
     state = {
         items: [
@@ -101,6 +103,10 @@ class Dashboard extends Component {
         }
     };
 
+
+    componentDidMount() {
+        this.props.socket.on("message", (message) => console.log(message));
+    }
 
     reorder = (list, startIndex, endIndex , droppableId) => {
         const result = Array.from(list);
