@@ -4,6 +4,17 @@
   &-logo{
     margin-right: 35px;
   }
+  
+  &-play{
+    background: #E9E9E9;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
 
   &-title{
     font-family: $font-lato-bold;
@@ -82,7 +93,7 @@
     }
     &_list{
       margin-top: 53px;
-      overflow: scroll;
+      overflow: auto;
       height: 560px;
       padding-right: 60px;
     }
@@ -126,19 +137,11 @@
     background: $white;
     color: $black;
     transition: 0.2s;
-    &:not(:last-child){
-      margin-bottom: 20px;
-    }
-    &:hover{
-      opacity: 0.5;
-    }
+    margin-bottom: 20px;
     &.color-green{
       background: $green;
       margin: 34px 0 21px;
       color: $white;
-      &:hover{
-        opacity: 1;
-      }
       .dashboard-message_header{
         background: $dark-green;
       }
@@ -150,9 +153,6 @@
       background: $dark-green;
       text-align: center;
       margin: 34px 0 21px;
-      &:hover{
-        opacity: 1;
-      }
       .dashboard-message_body{
         color: $white;
         padding: 45px 55px;
@@ -186,14 +186,19 @@
       grid-gap: 12px;
     }
     &_item{
-      background: $dark-white;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       &.first{
         grid-row: span 2;
-        height: 203px;
+        article{
+          height: 203px;
+        }
+      }
+      article{
+        background: $dark-white;
+        border-radius: 20px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
