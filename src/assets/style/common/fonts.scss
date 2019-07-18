@@ -1,0 +1,22 @@
+@mixin font-face($name, $url) {
+  @font-face {
+    font-family: '#{$name}';
+    src: url('#{$url}.eot');
+    src: url('#{$url}.eot?#iefix') format('embedded-opentype'),
+    url('#{$url}.ttf') format('truetype'),
+    url('#{$url}.woff') format('woff'),
+    url('#{$url}.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+
+@include font-face('Lato-Bold', '../fonts/Lato-Bold/Lato-Bold');
+@include font-face('Lato-Semibold', '../fonts/Lato-Semibold/Lato-Semibold');
+@include font-face('Nunito-Regular', '../fonts/Nunito-Regular/Nunito-Regular');
+@include font-face('Nunito-Semibold', '../fonts/Nunito-Semibold/Nunito-Semibold');
+
+$font-lato-bold: 'Lato-Bold', 'Arial', sans-serif;
+$font-lato-semiBold: 'Lato-Semibold', 'Arial', sans-serif;
+$font-nunito-regular: 'Nunito-Regular', 'Arial', sans-serif;
+$font-nunito-semiBold: 'Nunito-Semibold', 'Arial', sans-serif;

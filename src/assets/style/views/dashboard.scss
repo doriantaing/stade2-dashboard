@@ -1,0 +1,200 @@
+.dashboard{
+  display: flex;
+  justify-content: space-between;
+  &-logo{
+    margin-right: 35px;
+  }
+
+  &-title{
+    font-family: $font-lato-bold;
+    font-size: 28px;
+    color: $dark-white;
+    display: flex;
+    align-items: center;
+    &.text-black{
+      color: $light-black;
+      justify-content: space-between;
+    }
+    .red-dot{
+      width: 10px;
+      height: 10px;
+      background: $dark-red;
+      border-radius: 50%;
+      margin-left: 15px;
+    }
+    &_container{
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &-subtitle{
+    font-size: 24px;
+    font-family: $font-lato-semiBold;
+    color: $light-black;
+  }
+
+  .dashboard-select{
+    color: $dark-white;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: $font-nunito-semiBold;
+    &.text-black{
+      color: $black;
+      font-size: 14px;
+      &::after{
+        content: url("../img/arrow-down_black.svg");
+      }
+    }
+    &::after{
+      content: url("../img/arrow-down.svg");
+      margin-left: 7px;
+    }
+    //&__value-container{
+    //  padding: 0;
+    //}
+  }
+
+  &-chat{
+    width: 40%;
+    &_header{
+      padding: 33px 0 0 35px;
+      display: flex;
+      align-items: center;
+    }
+    &_body{
+      margin: 55px 0 0 120px;
+    }
+    &_count{
+      background: $white;
+      font-size: 12px;
+      font-family: $font-nunito-semiBold;
+      color: $black;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 30px;
+    }
+    &_list{
+      margin-top: 53px;
+      overflow: scroll;
+      height: 560px;
+      padding-right: 60px;
+    }
+  }
+
+  &-antenne{
+    background: $white;
+    height: auto;
+    width: 40%;
+    margin: 6px 6px 6px 0;
+    border-radius: 20px;
+    padding: 41px 35px 33px 106px;
+    &_header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    &_links{
+      a{
+        text-decoration: none;
+        color: $black;
+        font-family: $font-nunito-semiBold;
+        font-size: 14px;
+        &:not(:last-child){
+          margin-right: 35px;
+        }
+      }
+    }
+    &_body{
+      margin-top: 55px;
+    }
+    &_remove{
+      color: $red;
+      font-size: 14px;
+      text-decoration: none;
+    }
+  }
+
+  &-message{
+    border-radius: 20px;
+    background: $white;
+    color: $black;
+    transition: 0.2s;
+    &:not(:last-child){
+      margin-bottom: 20px;
+    }
+    &:hover{
+      opacity: 0.5;
+    }
+    &.color-green{
+      background: $green;
+      margin: 34px 0 21px;
+      color: $white;
+      &:hover{
+        opacity: 1;
+      }
+      .dashboard-message_header{
+        background: $dark-green;
+      }
+      .dashboard-message_body{
+        color: rgba($white, 0.7);
+      }
+    }
+    &.empty{
+      background: $dark-green;
+      text-align: center;
+      margin: 34px 0 21px;
+      &:hover{
+        opacity: 1;
+      }
+      .dashboard-message_body{
+        color: $white;
+        padding: 45px 55px;
+      }
+    }
+    &_header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: $darker-white;
+      padding: 12px 41px 10px 33px;
+      border-top-right-radius: 20px;
+      -webkit-border-top-left-radius: 20px;
+      font-size: 18px;
+      font-family: $font-nunito-semiBold;
+    }
+    &_body{
+      padding: 15px 41px 23px 33px;
+      color: $black;
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+
+  &-folders{
+    &_container{
+      margin-top: 37px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-gap: 12px;
+    }
+    &_item{
+      background: $dark-white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &.first{
+        grid-row: span 2;
+        height: 203px;
+      }
+    }
+  }
+}
