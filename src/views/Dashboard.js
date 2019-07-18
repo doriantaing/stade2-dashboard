@@ -53,21 +53,41 @@ class Dashboard extends Component {
         selected: []
     };
 
-    id2List = [
-        {
-            droppable: 'items'
-        },
-        {
-            droppable: 'selected'
-        }
-    ];
+    idDraggableList = {
+        droppable: 'items',
+        droppable2: 'selected'
+    };
 
-    getList = id => this.state[this.id2List[id].droppable];
+    getList = id => this.state[this.idDraggableList[id]];
+
+    // Reorder list of items in corresponding droppable
+    reorder = (list, startIndex, endIndex , droppableId) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+    };
+
+    // Move item to corresponding droppable
+    move = (source, destination, droppableSource, droppableDestination, isGoingLive, isFolder) => {
+
+        const sourceClone = Array.from(source);
+        const destClone = Array.from(destination);
+        const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+        isGoingLive ? destClone.splice(0, 1, removed) : destClone.splice(droppableDestination.index, 0, removed);
+
+        const result = {};
+        result[droppableSource.droppableId] = sourceClone;
+        result[droppableDestination.droppableId] = destClone;
+
+        return result;
+    };
 
     onDragEnd = result => {
         const { source, destination } = result;
 
-        // dropped outside the list
         if (!destination) {
             return;
         }
@@ -87,14 +107,41 @@ class Dashboard extends Component {
 
             this.setState(state);
         } else {
-            console.log(source.droppableId);
-            console.log(this.getList(source.droppableId));
-            const result = this.move(
-                this.getList(source.droppableId),
-                this.getList(destination.droppableId),
-                source,
-                destination
-            );
+            let isGoingLive = false;
+            let result;
+            let isFolder;
+
+            if(destination.droppableId === 'droppable2'){
+                 isGoingLive = true;
+
+                result = this.move(
+                   this.getList(source.droppableId),
+                   this.getList(destination.droppableId),
+                   source,
+                   destination,
+                   isGoingLive
+                )
+            } else if(destination.droppableId === 'droppable-folder1'){
+                isFolder = true;
+
+                result = this.move(
+                    this.getList(source.droppableId),
+                    this.getList(destination.droppableId),
+                    source,
+                    destination,
+                    isGoingLive,
+                    isFolder
+                );
+            } else {
+                result = this.move(
+                    this.getList(source.droppableId),
+                    this.getList(destination.droppableId),
+                    source,
+                    destination,
+                    isGoingLive
+                );
+            }
+
 
             this.setState({
                 items: result.droppable,
@@ -105,34 +152,28 @@ class Dashboard extends Component {
 
 
     componentDidMount() {
-        this.props.socket.on("message", (message) => console.log(message));
+        this.props.socket.on("message", ({message}) => {
+            const {items} = this.state;
+            const item = {
+                id: `item-${items.length}`,
+                author: 'John Doe',
+                message,
+            };
+
+            items.unshift(item);
+            const newItem = items;
+
+            this.setState({
+                items: newItem
+            });
+        });
     }
 
-    reorder = (list, startIndex, endIndex , droppableId) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
 
-        return result;
+    clickAudio = () => {
+        console.log('Play audio');
     };
 
-    move = (source, destination, droppableSource, droppableDestination) => {
-        console.log('OKKK');
-        const sourceClone = Array.from(source);
-        const destClone = Array.from(destination);
-        const [removed] = sourceClone.splice(droppableSource.index, 1);
-        
-        console.log('SOURCE', sourceClone);
-        console.log('DEST', destClone);
-        console.log('REMOVED', removed);
-        destClone.splice(droppableDestination.index, 0, removed);
-
-        const result = {};
-        result[droppableSource.droppableId] = sourceClone;
-        result[droppableDestination.droppableId] = destClone;
-
-        return result;
-    };
 
 
     render() {
@@ -142,10 +183,12 @@ class Dashboard extends Component {
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <DashboardChat
                         items={items}
+                        clickAudio={this.clickAudio}
                     />
                     <DashboardAntenne
                         items={selected}
                         getListStyle={getListStyle}
+                        clickAudio={this.clickAudio}
                     />
                 </DragDropContext>
             </section>

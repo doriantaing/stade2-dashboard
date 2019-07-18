@@ -4,6 +4,17 @@
   &-logo{
     margin-right: 35px;
   }
+  
+  &-play{
+    background: #E9E9E9;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
 
   &-title{
     font-family: $font-lato-bold;
@@ -85,12 +96,6 @@
       overflow: scroll;
       height: 560px;
       padding-right: 60px;
-      &:hover > .dashboard-message{
-        opacity: 0.5;
-        &:hover{
-          opacity: 1;
-        }
-      }
     }
   }
 
@@ -132,9 +137,7 @@
     background: $white;
     color: $black;
     transition: 0.2s;
-    &:not(:last-child){
-      margin-bottom: 20px;
-    }
+    margin-bottom: 20px;
     &.color-green{
       background: $green;
       margin: 34px 0 21px;
@@ -183,14 +186,19 @@
       grid-gap: 12px;
     }
     &_item{
-      background: $dark-white;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       &.first{
         grid-row: span 2;
-        height: 203px;
+        article{
+          height: 203px;
+        }
+      }
+      article{
+        background: $dark-white;
+        border-radius: 20px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

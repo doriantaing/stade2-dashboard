@@ -2,12 +2,8 @@ import React, {useState} from 'react';
 import sources from "../assets/img";
 import {Draggable, Droppable} from "react-beautiful-dnd";
 
-const DashboardChat = ({items, eventHover}) => {
-
-  const [hovered, setHovered] = useState(false);
-  const toggleHover = () => setHovered(!hovered);
-
-  return(
+const DashboardChat = ({items, clickAudio}) => {
+    return(
       <div className="dashboard-chat">
           <nav className='dashboard-chat_header'>
               <img src={sources.logo} alt="logo" className='dashboard-logo'/>
@@ -19,7 +15,7 @@ const DashboardChat = ({items, eventHover}) => {
               <div className="dashboard-title">
                   <h3>Chat en ligne</h3>
                   <div className="dashboard-chat_count">
-                      <p>24</p>
+                      <p>{items.length}</p>
                   </div>
               </div>
               <div className="dashboard-chat_list">
@@ -40,7 +36,9 @@ const DashboardChat = ({items, eventHover}) => {
                                           >
                                               <nav className="dashboard-message_header">
                                                   <h4 className="dashboard-message_author">{item.author}</h4>
-                                                  <img src={sources.play} alt="icon play"/>
+                                                  <div className="dashboard-play" onClick={clickAudio}>
+                                                      <img src={sources.play} alt="icon play audio"/>
+                                                  </div>
                                               </nav>
                                               <div className="dashboard-message_body">
                                                   <p>{item.message}</p>
