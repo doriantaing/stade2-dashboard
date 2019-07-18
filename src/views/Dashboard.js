@@ -21,7 +21,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     ...draggableStyle
 });
 
-const getListStyle = isDraggingOver => ({
+const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? "lightblue" : "white",
     padding: grid,
 });
@@ -36,29 +36,65 @@ class Dashboard extends Component {
                 author: 'Amalie Flores',
                 message: 'Est-ce que les frères Bogdanov aiment mes illusions de jeunesse ? Elles déséquilibraient des âmes.'
             },
-           /* {
-                id: 'item-1',
-                author: 'Shaun E. Suarez',
-                message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
-            },
-            {
-                id: 'item-2',
-                author: 'Shaun E. Suarez',
-                message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
-            },
-            {
-                id: 'item-3',
-                author: 'Shaun E. Suarez',
-                message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
-            }*/
+            // {
+            //     id: 'item-1',
+            //     author: 'Shaun E. Suarez',
+            //     message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
+            // },
+            // {
+            //     id: 'item-2',
+            //     author: 'Shaun E. Suarez',
+            //     message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
+            // },
+            // {
+            //     id: 'item-3',
+            //     author: 'Shaun E. Suarez',
+            //     message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
+            // }
         ],
-        selected: []
+        selected: [],
+        folder: [
+            {
+                id: 0,
+                count: 0,
+                text: 'Les questions'
+            },
+            {
+                id: 1,
+                count: 0,
+                text: 'Dossier 2'
+            },
+            {
+                id: 2,
+                count: 0,
+                text: 'Dossier 3'
+            }
+        ]
     };
+
+    componentDidMount() {
+        this.props.socket.on("message", ({message}) => {
+            const {items} = this.state;
+            const item = {
+                id: `item-${items.length + 1}`,
+                author: faker.name.findName(),//'John Doe',
+                message,
+            };
+
+            items.unshift(item);
+            const newItem = items;
+
+            this.setState({
+                items: newItem
+            });
+        });
+    }
 
     idDraggableList = {
         droppable: 'items',
-        droppable2: 'selected'
+        droppable2: 'selected',
     };
+
 
     getList = id => this.state[this.idDraggableList[id]];
 
@@ -74,9 +110,18 @@ class Dashboard extends Component {
     // Move item to corresponding droppable
     move = (source, destination, droppableSource, droppableDestination, isGoingLive, isFolder) => {
 
+        if(isFolder){
+            const sourceClone = Array.from(source);
+            const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+            const result = {};
+            result[droppableSource.droppableId] = sourceClone;
+            return result;
+        }
+
         const sourceClone = Array.from(source);
-        const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
+        const destClone = Array.from(destination);
 
         isGoingLive ? destClone.splice(0, 1, removed) : destClone.splice(droppableDestination.index, 0, removed);
 
@@ -123,17 +168,40 @@ class Dashboard extends Component {
                    destination,
                    isGoingLive
                 )
-            } else if(destination.droppableId === 'droppable-folder1'){
+            } else if(destination.droppableId.includes('droppable-folder')){
                 isFolder = true;
+                
+                // if(destination.droppableId.includes('0')) {
+                //     this.setState(state => {
+                //         const list = state.folder.map((item) => {
+                //             if (item.id === 0) {
+                //                 return {...item, count: item.count + 1}
+                //             } else {
+                //                 return item;
+                //             }
+                //         });
+                //
+                //         return {list};
+                //     })
+                // }
 
-                result = this.move(
-                    this.getList(source.droppableId),
-                    this.getList(destination.droppableId),
-                    source,
-                    destination,
-                    isGoingLive,
-                    isFolder
-                );
+
+                if(source.droppableId === 'droppable'){
+                    result = this.move(
+                        this.getList(source.droppableId),
+                        this.getList(destination.droppableId),
+                        source,
+                        destination,
+                        isGoingLive,
+                        isFolder
+                    );
+                } else {
+                    result = {
+                        droppable: this.state.items,
+                        droppable2: []
+                    }
+                }
+
             } else {
                 result = this.move(
                     this.getList(source.droppableId),
@@ -145,41 +213,27 @@ class Dashboard extends Component {
             }
 
 
-            this.setState({
+            this.setState(prevState => ({
                 items: result.droppable,
-                selected: result.droppable2
-            });
+                selected: result.droppable2 ? result.droppable2 : prevState.selected
+            }));
         }
     };
 
-
-    componentDidMount() {
-        this.props.socket.on("message", ({message}) => {
-            const {items} = this.state;
-            const item = {
-                id: `item-${items.length}`,
-                author: faker.name.findName(),//'John Doe',
-                message,
-            };
-
-            items.unshift(item);
-            const newItem = items;
-
-            this.setState({
-                items: newItem
-            });
-        });
-    }
 
 
     clickAudio = () => {
         console.log('Play audio');
     };
 
-
+    removeMessageLive = () => {
+        this.setState({
+            selected: []
+        })
+    };
 
     render() {
-        const {items, selected} = this.state;
+        const {items, selected, folder} = this.state;
         return (
             <section className='dashboard'>
                 <DragDropContext onDragEnd={this.onDragEnd}>
@@ -191,6 +245,8 @@ class Dashboard extends Component {
                         items={selected}
                         getListStyle={getListStyle}
                         clickAudio={this.clickAudio}
+                        folder={folder}
+                        removeMessageLive={this.removeMessageLive}
                     />
                 </DragDropContext>
             </section>
