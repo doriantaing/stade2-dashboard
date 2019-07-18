@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import sources from "../assets/img";
 import {Draggable, Droppable} from "react-beautiful-dnd";
 
-const DashboardChat = ({items}) => {
+const DashboardChat = ({items, eventHover}) => {
+
+  const [hovered, setHovered] = useState(false);
+  const toggleHover = () => setHovered(!hovered);
+
   return(
       <div className="dashboard-chat">
           <nav className='dashboard-chat_header'>
@@ -32,7 +36,7 @@ const DashboardChat = ({items}) => {
                                               ref={provided.innerRef}
                                               {...provided.draggableProps}
                                               {...provided.dragHandleProps}
-                                              className="dashboard-message"
+                                              className='dashboard-message'
                                           >
                                               <nav className="dashboard-message_header">
                                                   <h4 className="dashboard-message_author">{item.author}</h4>

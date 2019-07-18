@@ -2,7 +2,7 @@ import React from 'react';
 import {Draggable, Droppable} from "react-beautiful-dnd";
 import sources from "../assets/img";
 
-const DashboardAntenne = ({getListStyle}) => {
+const DashboardAntenne = ({items, getListStyle}) => {
     return(
         <div className="dashboard-antenne">
             <nav className="dashboard-antenne_header">
@@ -30,13 +30,34 @@ const DashboardAntenne = ({getListStyle}) => {
                             ref={provided.innerRef}
                             style={getListStyle(snapshot.isDraggingOver)}
                         >
-                            <article className="dashboard-message empty">
-                                <div className="dashboard-message_body">
-                                    <p>
-                                        Cette réaction va être présenter lors de l’emission
-                                    </p>
-                                </div>
-                            </article>
+
+                            {/*<article className="dashboard-message empty">*/}
+                            {/*    <div className="dashboard-message_body">*/}
+                            {/*        <p>*/}
+                            {/*            Cette réaction va être présenter lors de l’emission*/}
+                            {/*        </p>*/}
+                            {/*    </div>*/}
+                            {/*</article>*/}
+                            {items.map((item, index) => (
+                                <Draggable key={item.id} draggableId={item.id} index={index}>
+                                    {(provided, snapshot) => (
+                                        <article
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            className='dashboard-message'
+                                        >
+                                            <nav className="dashboard-message_header">
+                                                <h4 className="dashboard-message_author">{item.author}</h4>
+                                                <img src={sources.play} alt="icon play"/>
+                                            </nav>
+                                            <div className="dashboard-message_body">
+                                                <p>{item.message}</p>
+                                            </div>
+                                        </article>
+                                    )}
+                                </Draggable>
+                            ))}
                             {provided.placeholder}
                         </div>
                     )}
