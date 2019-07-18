@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {DragDropContext} from "react-beautiful-dnd";
 import DashboardChat from '../components/DashboardChat';
 import DashboardAntenne from '../components/DashboardAntenne';
+import faker from 'faker';
+
 
 
 const grid = 8;
@@ -34,7 +36,7 @@ class Dashboard extends Component {
                 author: 'Amalie Flores',
                 message: 'Est-ce que les frères Bogdanov aiment mes illusions de jeunesse ? Elles déséquilibraient des âmes.'
             },
-            {
+           /* {
                 id: 'item-1',
                 author: 'Shaun E. Suarez',
                 message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
@@ -48,7 +50,7 @@ class Dashboard extends Component {
                 id: 'item-3',
                 author: 'Shaun E. Suarez',
                 message: 'Ces pilotes de rallye disent merci à l\'archive. Nous fermons des ongles en ne mugissant plus. La connasse perfore un ogre. La baronne associe une présentation et un bouc. Les héritières divorcent ! Les dilettantes disséquaient ce politicien.'
-            }
+            }*/
         ],
         selected: []
     };
@@ -156,7 +158,7 @@ class Dashboard extends Component {
             const {items} = this.state;
             const item = {
                 id: `item-${items.length}`,
-                author: 'John Doe',
+                author: faker.name.findName(),//'John Doe',
                 message,
             };
 
